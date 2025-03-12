@@ -24,11 +24,20 @@ public class EvaluationService implements IDao<Evaluation> {
 
     @Override
     public boolean create(Evaluation evaluation) {
+        if (evaluation == null || evaluation.getEnseignant() == null || evaluation.getEtudiant() == null) {
+    System.out.println("Erreur : L'évaluation ou ses composants sont null");
+    return false;
+}
+
+if (connexion == null || connexion.getCn() == null) {
+    System.out.println("Erreur : La connexion à la base de données n'est pas disponible");
+    return false;
+}
         String req = "INSERT INTO Evaluation (enseignant_id, etudiant_id, note, commentaire) VALUES (?, ?, ?, ?)";
         try {
             PreparedStatement ps = connexion.getCn().prepareStatement(req);
-            ps.setInt(1, evaluation.getEnseignant_id().getId());
-            ps.setInt(2, evaluation.getEtudiant_id().getId());
+            ps.setInt(1, evaluation.getEnseignant().getId());
+            ps.setInt(2, evaluation.getEtudiant().getId());
             ps.setDouble(3, evaluation.getNote());
             ps.setString(4, evaluation.getCommentaire());
             ps.executeUpdate();
@@ -71,8 +80,8 @@ public class EvaluationService implements IDao<Evaluation> {
             PreparedStatement ps = connexion.getCn().prepareStatement(req);
             ps.setDouble(1, evaluation.getNote());
             ps.setString(2, evaluation.getCommentaire());
-            ps.setInt(3, evaluation.getEnseignant_id().getId());
-            ps.setInt(4, evaluation.getEtudiant_id().getId());
+            ps.setInt(3, evaluation.getEnseignant().getId());
+            ps.setInt(4, evaluation.getEtudiant().getId());
             ps.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -86,8 +95,8 @@ public class EvaluationService implements IDao<Evaluation> {
         String req = "DELETE FROM Evaluation WHERE enseignant_id = ? AND etudiant_id = ?";
         try {
             PreparedStatement ps = connexion.getCn().prepareStatement(req);
-            ps.setInt(1, evaluation.getEnseignant_id().getId());
-            ps.setInt(2, evaluation.getEtudiant_id().getId());
+            ps.setInt(1, evaluation.getEnseignant().getId());
+            ps.setInt(2, evaluation.getEtudiant().getId());
             ps.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -100,7 +109,7 @@ public class EvaluationService implements IDao<Evaluation> {
         List<Evaluation> evaluations = findAll(); // Charge les données de la base de données
         List<Evaluation> result = new ArrayList<>();
         for (Evaluation e : evaluations) {
-            if (e.getEnseignant_id().getId() == enseignantId) {
+            if (e.getEnseignant().getId() == enseignantId) {
                 result.add(e);
             }
         }
@@ -111,7 +120,7 @@ public class EvaluationService implements IDao<Evaluation> {
         List<Evaluation> evaluations = findAll(); // Charge les données de la base de données
         List<String> commentaires = new ArrayList<>();
         for (Evaluation e : evaluations) {
-            if (e.getEnseignant_id().getId() == enseignantId) {
+            if (e.getEnseignant().getId() == enseignantId) {
                 commentaires.add(e.getCommentaire());
             }
         }

@@ -66,24 +66,30 @@ public class Test {
         // Création d'évaluations
        
 
-        evaluationService.create(new Evaluation(enseignantService.findById(1) ,etudiantService.findById(1), 85.0, "Très bonne performance"));
-        evaluationService.create(new Evaluation(enseignantService.findById(2) ,etudiantService.findById(2),90.0, "Excellente participation"));
+         enseignant = enseignantService.findById(1);
+         etudiant = etudiantService.findById(1);
+      if (enseignant != null && etudiant != null) {
+         evaluationService.create(new Evaluation(enseignant, etudiant, 85.0, "Très bonne performance"));
+      } else {
+         System.out.println("Impossible de créer l'évaluation: enseignant ou étudiant non trouvé");
+        evaluationService.create(new Evaluation(enseignantService.findById(2) ,etudiantService.findById(2), 90.0, "Excellente participation"));
 
 
         // Vérification des évaluations
         List<Evaluation> evaluations = evaluationService.findAll();
         for (Evaluation eva : evaluations) {
-            System.out.println("Evaluation : " + eva.getEtudiant_id().getNom() + " est passer l'evaluation par " + eva.getEnseignant_id().getNom());
+            System.out.println("Evaluation : " + eva.getEtudiant().getNom() + " est passer l'evaluation par " + eva.getEnseignant().getNom());
         }
 
         Evaluation evaluationToDelete = evaluationService.findAll().get(0);
         evaluationService.delete(evaluationToDelete);
-        System.out.println("Evaluation supprimée : " + evaluationToDelete.getEtudiant_id().getNom() + " - " + evaluationToDelete.getEnseignant_id().getNom());
+        System.out.println("Evaluation supprimée : " + evaluationToDelete.getEtudiant().getNom() + " - " + evaluationToDelete.getEnseignant().getNom());
 
         System.out.println("\nEvaluation restantes :");
         for (Evaluation eva : evaluationService.findAll()) {
-            System.out.println(eva.getEnseignant_id().getNom() + "Evaluation  : " + eva.getEtudiant_id().getNom() + " est passer l'evaluation par  ");
+            System.out.println(eva.getEnseignant().getNom() + "Evaluation  : " + eva.getEtudiant().getNom() + " est passer l'evaluation par  ");
         }
     }
 
+}
 }
