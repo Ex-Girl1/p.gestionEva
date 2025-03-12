@@ -48,7 +48,7 @@ public class Test {
 
        Etudiant etudiant = etudiantService.findById(1);
         if (etudiant != null) {
-            System.out.println("Étudiant trouvé : " + etudiant.getNom() + " " + etudiant.getPrenom() +" " +etudiant.getEmail());
+            System.out.println("Étudiant trouvé : " + etudiant.getNom() + " " + etudiant.getPrenom() + " " +etudiant.getEmail());
         }
         etudiant.setEmail("ali.new@example.com");
         etudiantService.update(etudiant);
@@ -60,7 +60,7 @@ public class Test {
         }
 
 
-// Vérification de la création des étudiants
+
         System.out.println("Étudiants enregistrés : " + etudiantService.findAll());
 
         // Création d'évaluations

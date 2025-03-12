@@ -6,7 +6,11 @@
 package services;
 
 import beans.Enseignant;
+import connexion.Connexion;
 import dao.IDao;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,28 +21,72 @@ import java.util.stream.Collectors;
  */
 public class EnseignantService implements IDao<Enseignant>  {
     private final List<Enseignant> enseignants = new ArrayList<>();
-
+    private Connexion connexion;
+     public EnseignantService() {
+        connexion = Connexion.getInstance();
+     }
+        
     @Override
     public boolean create(Enseignant enseignant) {
-        return enseignants.add(enseignant); //To change body of generated methods, choose Tools | Templates.
-    }
+String req = "INSERT INTO Enseignant (nom, prenom, matiere) VALUES (?, ?, ?)";
+        try {
+            PreparedStatement ps = connexion.getCn().prepareStatement(req);
+            ps.setString(1, enseignant.getNom());
+            ps.setString(2, enseignant.getPrenom());
+            ps.setString(3, enseignant.getMatiere());
+            ps.executeUpdate();
+            return true;      
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return false;    }
 
     @Override
     public Enseignant findById(int id) {
-        return enseignants.stream().filter(e -> e.getId() == id).findFirst().orElse(null);
+         String req = "SELECT * FROM Enseignant WHERE id = ?";
+        try {
+            PreparedStatement ps = connexion.getCn().prepareStatement(req);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Enseignant(rs.getInt("id"), rs.getString("nom"), rs.getString("prenom"), rs.getString("matiere"));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return null;
     }
 
     @Override
     public List<Enseignant> findAll() {
+       List<Enseignant> enseignants = new ArrayList<>();
+        String req = "SELECT * FROM Enseignant";
+        try {
+            PreparedStatement ps = connexion.getCn().prepareStatement(req);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                enseignants.add(new Enseignant(rs.getInt("id"), rs.getString("nom"), rs.getString("prenom"), rs.getString("matiere")));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
         return enseignants;
     }
 
     @Override
     public boolean update(Enseignant enseignant) {
-        int index = enseignants.indexOf(findById(enseignant.getId()));
-        if (index != -1) {
-            enseignants.set(index, enseignant);
+        String req = "UPDATE Enseignant SET nom = ?, prenom = ?, matiere = ? WHERE id = ?";
+        try {
+            PreparedStatement ps = connexion.getCn().prepareStatement(req);
+            ps.setString(1, enseignant.getNom());
+            ps.setString(2, enseignant.getPrenom());
+            ps.setString(3, enseignant.getMatiere());
+            ps.setInt(4, enseignant.getId());
+            ps.executeUpdate();
             return true;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
         return false;
     }
@@ -63,7 +111,16 @@ public class EnseignantService implements IDao<Enseignant>  {
 
     @Override
     public boolean delete(Enseignant enseignant) {
-         return enseignants.remove(enseignant); //To change body of generated methods, choose Tools | Templates.
+         String req = "DELETE FROM Enseignant WHERE id = ?";
+        try {
+            PreparedStatement ps = connexion.getCn().prepareStatement(req);
+            ps.setInt(1, enseignant.getId());
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return false; //To change body of generated methods, choose Tools | Templates.
     }
 
 
