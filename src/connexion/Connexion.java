@@ -17,7 +17,7 @@ public class Connexion {
     private static Connexion instance = null;
     private Connection cn = null;
     
-    private static final String url = "jdbc:mysql://127.0.0.1:3308/gevaluationenes";
+    private static final String url = "jdbc:mysql://localhost:3306/gevaluationenes";
     private final String login = "root";
     private final String password = "";
     private Connexion() {

@@ -22,7 +22,7 @@ public class GestEvaEnse {
     public static void main(String[] args) {
        
          String url;
-         url = "jdbc:mysql://127.0.0.1:3308/gevaluationenes";
+         url = "jdbc:mysql://localhost:3306/gevaluationenes";
         String login = "root";
         String password = "";
         Connection cn = null;
@@ -30,7 +30,8 @@ public class GestEvaEnse {
             Class.forName("com.mysql.jdbc.Driver");
             cn = DriverManager.getConnection(url, login, password);
         
-            String req = "create table enseignant(id int primary key auto_increment,nom VARCHAR(50),prenom VARCHAR(50), matiere VARCHAR(50))";
+            String req;
+             req = "INSERT INTO etudiant(nom, prenom, email) VALUES ('Ali', 'Ben', 'ali@gmail.com');";
        
             Statement st = cn.createStatement();
             st.executeUpdate(req);
