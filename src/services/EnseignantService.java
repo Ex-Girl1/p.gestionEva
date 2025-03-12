@@ -49,8 +49,12 @@ public class EnseignantService implements IDao<Enseignant>  {
      * @return
      */
    
-    
-    
+    /**
+     *
+     * @param nom
+     * @param id
+     * @return
+     */
     public List<Enseignant> rechercherEnseignant(String nom) {
         return enseignants.stream()
                 .filter(e -> e.getNom().equalsIgnoreCase(nom))
