@@ -19,32 +19,35 @@ import java.util.stream.Collectors;
  *
  * @author hp
  */
-public class EnseignantService implements IDao<Enseignant>  {
+public class EnseignantService implements IDao<Enseignant> {
+
     private final List<Enseignant> enseignants = new ArrayList<>();
     private Connexion connexion;
-     public EnseignantService() {
+
+    public EnseignantService() {
         connexion = Connexion.getInstance();
-     }
-        
+    }
+
     @Override
     public boolean create(Enseignant enseignant) {
-String req = "INSERT INTO Enseignant (nom, prenom, matiere) VALUES (?, ?, ?)";
+        String req = "INSERT INTO Enseignant (nom, prenom, matiere) VALUES (?, ?, ?)";
         try {
             PreparedStatement ps = connexion.getCn().prepareStatement(req);
             ps.setString(1, enseignant.getNom());
             ps.setString(2, enseignant.getPrenom());
             ps.setString(3, enseignant.getMatiere());
             ps.executeUpdate();
-            return true;      
+            return true;
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-        return false;    }
+        return false;
+    }
 
     @Override
     public Enseignant findById(int id) {
-         String req = "SELECT * FROM Enseignant WHERE id = ?";
+        String req = "SELECT * FROM Enseignant WHERE id = ?";
         try {
             PreparedStatement ps = connexion.getCn().prepareStatement(req);
             ps.setInt(1, id);
@@ -60,7 +63,7 @@ String req = "INSERT INTO Enseignant (nom, prenom, matiere) VALUES (?, ?, ?)";
 
     @Override
     public List<Enseignant> findAll() {
-       List<Enseignant> enseignants = new ArrayList<>();
+        List<Enseignant> enseignants = new ArrayList<>();
         String req = "SELECT * FROM Enseignant";
         try {
             PreparedStatement ps = connexion.getCn().prepareStatement(req);
@@ -96,7 +99,6 @@ String req = "INSERT INTO Enseignant (nom, prenom, matiere) VALUES (?, ?, ?)";
      * @param id
      * @return
      */
-   
     /**
      *
      * @param nom
@@ -111,7 +113,7 @@ String req = "INSERT INTO Enseignant (nom, prenom, matiere) VALUES (?, ?, ?)";
 
     @Override
     public boolean delete(Enseignant enseignant) {
-         String req = "DELETE FROM Enseignant WHERE id = ?";
+        String req = "DELETE FROM Enseignant WHERE id = ?";
         try {
             PreparedStatement ps = connexion.getCn().prepareStatement(req);
             ps.setInt(1, enseignant.getId());
@@ -123,11 +125,4 @@ String req = "INSERT INTO Enseignant (nom, prenom, matiere) VALUES (?, ?, ?)";
         return false; //To change body of generated methods, choose Tools | Templates.
     }
 
-
 }
-
-    
-
-    
-    
-

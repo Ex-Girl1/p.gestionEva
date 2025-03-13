@@ -10,13 +10,14 @@ package beans;
  * @author hp
  */
 public class Evaluation {
+
     private Enseignant enseignant;
     private Etudiant etudiant;
     private double note;
     private String commentaire;
 
     // Constructeur principal
-    public Evaluation( Enseignant enseignant, Etudiant etudiant, double note, String commentaire) {
+    public Evaluation(Enseignant enseignant, Etudiant etudiant, double note, String commentaire) {
         this.enseignant = enseignant;
         this.etudiant = etudiant;
         this.note = note;
@@ -24,14 +25,12 @@ public class Evaluation {
     }
 
     // Getters et Setters
-   
-
     public Enseignant getEnseignant() {
         return enseignant;
     }
 
     public void setEnseignant_id(Enseignant enseignant) {
-        this.enseignant= enseignant;
+        this.enseignant = enseignant;
     }
 
     public Etudiant getEtudiant() {
@@ -57,4 +56,4 @@ public class Evaluation {
     public void setCommentaire(String commentaire) {
         this.commentaire = commentaire;
     }
-} 
+}

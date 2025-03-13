@@ -17,14 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EvaluationService implements IDao<Evaluation> {
- 
+
     private Connexion connexion = Connexion.getInstance(); // Initialisation correcte
     private EnseignantService enseignantService = new EnseignantService();
     private EtudiantService etudiantService = new EtudiantService();
 
     @Override
     public boolean create(Evaluation evaluation) {
-        
+
         String req = "INSERT INTO Evaluation (enseignant_id, etudiant_id, note, commentaire) VALUES (?, ?, ?, ?)";
         try {
             PreparedStatement ps = connexion.getCn().prepareStatement(req);

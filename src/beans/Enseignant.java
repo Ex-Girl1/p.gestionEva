@@ -10,12 +10,12 @@ package beans;
  * @author hp
  */
 public class Enseignant {
- 
+
     private int id;
     private String nom;
     private String prenom;
     private String matiere;
-    
+
     public Enseignant(int id, String nom, String prenom, String matiere) {
         this.id = id;
         this.nom = nom;
@@ -78,5 +78,5 @@ public class Enseignant {
     public void setMatiere(String matiere) {
         this.matiere = matiere;
     }
-    
+
 }
