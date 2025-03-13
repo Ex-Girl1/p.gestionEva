@@ -24,15 +24,7 @@ public class EvaluationService implements IDao<Evaluation> {
 
     @Override
     public boolean create(Evaluation evaluation) {
-        if (evaluation == null || evaluation.getEnseignant() == null || evaluation.getEtudiant() == null) {
-    System.out.println("Erreur : L'évaluation ou ses composants sont null");
-    return false;
-}
-
-if (connexion == null || connexion.getCn() == null) {
-    System.out.println("Erreur : La connexion à la base de données n'est pas disponible");
-    return false;
-}
+        
         String req = "INSERT INTO Evaluation (enseignant_id, etudiant_id, note, commentaire) VALUES (?, ?, ?, ?)";
         try {
             PreparedStatement ps = connexion.getCn().prepareStatement(req);

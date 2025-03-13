@@ -70,9 +70,14 @@ public class Test {
          etudiant = etudiantService.findById(1);
       if (enseignant != null && etudiant != null) {
          evaluationService.create(new Evaluation(enseignant, etudiant, 85.0, "Très bonne performance"));
-      } else {
-         System.out.println("Impossible de créer l'évaluation: enseignant ou étudiant non trouvé");
-        evaluationService.create(new Evaluation(enseignantService.findById(2) ,etudiantService.findById(2), 90.0, "Excellente participation"));
+      } 
+       Enseignant enseignant2 = enseignantService.findById(2);
+       Etudiant etudiant2 = etudiantService.findById(2);
+       if (enseignant2 != null && etudiant2 != null) {
+             evaluationService.create(new Evaluation(enseignant2, etudiant2, 90.0, "Excellente participation"));
+        } else {
+            System.out.println("Impossible de créer l'évaluation: enseignant ou étudiant non trouvé");
+        }
 
 
         // Vérification des évaluations
@@ -91,5 +96,4 @@ public class Test {
         }
     }
 
-}
 }
