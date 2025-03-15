@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package test;
+
 import beans.Enseignant;
 import beans.Etudiant;
 import beans.Evaluation;
@@ -11,12 +12,14 @@ import java.util.List;
 import services.EnseignantService;
 import services.EtudiantService;
 import services.EvaluationService;
+
 /**
  *
  * @author hp
  */
 
 public class Test {
+
     public static void main(String[] args) {
         EnseignantService enseignantService = new EnseignantService();
         EtudiantService etudiantService = new EtudiantService();
@@ -64,9 +67,17 @@ public class Test {
         // Création d'évaluations
         boolean eval1 = evaluationService.create(new Evaluation(enseignant, etudiant, 85.0, "Très bonne performance"));
         boolean eval2 = evaluationService.create(new Evaluation(enseignant, etudiant, 90.0, "Excellente participation"));
-        
-        if (eval1) System.out.println("Évaluation 1 ajoutée avec succès !");
-        if (eval2) System.out.println("Évaluation 2 ajoutée avec succès !");
+        boolean eval3 = evaluationService.create(new Evaluation(enseignant, etudiant, 100.0, "Very good"));
+
+        if (eval1) {
+            System.out.println("Évaluation 1 ajoutée avec succès !");
+        }
+        if (eval2) {
+            System.out.println("Évaluation 2 ajoutée avec succès !");
+        }
+        if (eval3) {
+            System.out.println("Évaluation 3 ajoutée avec succès !");
+        }
 
         // Vérification des évaluations
         List<Evaluation> evaluations = evaluationService.findAll();
@@ -82,10 +93,15 @@ public class Test {
         }
 
         // Affichage des évaluations restantes
-        System.out.println("\nÉvaluations restantes :");
-        evaluations = evaluationService.findAll();
-        for (Evaluation eva : evaluations) {
-            System.out.println("Évaluation " + eva.getId() + " : " + eva.getEnseignant().getNom() + " a évalué " + eva.getEtudiant().getNom());
+        List<Evaluation> evaluationsRestantes = evaluationService.findAll();
+        System.out.println("Évaluations restantes :");
+        if (evaluationsRestantes.isEmpty()) {
+            System.out.println("Aucune évaluation trouvée.");
+        } else {
+            for (Evaluation eval : evaluationsRestantes) {
+                System.out.println(eval.getEtudiant().getNom() + " a été évalué par " + eval.getEnseignant().getNom()
+                        + " avec la note " + eval.getNote());
+            }
         }
     }
 }
