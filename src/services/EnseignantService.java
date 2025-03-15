@@ -13,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
  */
 public class EnseignantService implements IDao<Enseignant> {
 
-    private final List<Enseignant> enseignants = new ArrayList<>();
+    
     private Connexion connexion;
 
     public EnseignantService() {
@@ -62,20 +61,26 @@ public class EnseignantService implements IDao<Enseignant> {
     }
 
     @Override
-    public List<Enseignant> findAll() {
-        List<Enseignant> enseignants = new ArrayList<>();
-        String req = "SELECT * FROM Enseignant";
-        try {
-            PreparedStatement ps = connexion.getCn().prepareStatement(req);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                enseignants.add(new Enseignant(rs.getInt("id"), rs.getString("nom"), rs.getString("prenom"), rs.getString("matiere")));
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+public List<Enseignant> findAll() {
+    List<Enseignant> enseignants = new ArrayList<>();
+    String req = "SELECT * FROM Enseignant";
+    try {
+        PreparedStatement ps = connexion.getCn().prepareStatement(req);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            enseignants.add(new Enseignant(
+                    rs.getInt("id"),
+                    rs.getString("nom"),
+                    rs.getString("prenom"),
+                    rs.getString("matiere")
+            ));
         }
-        return enseignants;
+    } catch (SQLException ex) {
+        System.out.println(ex.getMessage());
     }
+    return enseignants;
+}
+
 
     @Override
     public boolean update(Enseignant enseignant) {
@@ -106,10 +111,27 @@ public class EnseignantService implements IDao<Enseignant> {
      * @return
      */
     public List<Enseignant> rechercherEnseignant(String nom) {
-        return enseignants.stream()
-                .filter(e -> e.getNom().equalsIgnoreCase(nom))
-                .collect(Collectors.toList());
+    List<Enseignant> result = new ArrayList<>();
+    String req = "SELECT * FROM Enseignant WHERE nom LIKE ?";
+    try {
+        PreparedStatement ps = connexion.getCn().prepareStatement(req);
+        ps.setString(1, "%" + nom + "%");
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            result.add(new Enseignant(
+                    rs.getInt("id"), 
+                    rs.getString("nom"), 
+                    rs.getString("prenom"), 
+                    rs.getString("matiere")
+            ));
+        }
+    } catch (SQLException ex) {
+        System.out.println(ex.getMessage());
     }
+    return result;
+}
+
+
 
     @Override
     public boolean delete(Enseignant enseignant) {

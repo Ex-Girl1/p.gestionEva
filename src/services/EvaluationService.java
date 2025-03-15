@@ -15,24 +15,42 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Statement;
 
 public class EvaluationService implements IDao<Evaluation> {
 
-    private Connexion connexion = Connexion.getInstance(); // Initialisation correcte
+    private Connexion connexion = Connexion.getInstance();
     private EnseignantService enseignantService = new EnseignantService();
     private EtudiantService etudiantService = new EtudiantService();
 
     @Override
     public boolean create(Evaluation evaluation) {
+        Enseignant enseignant = enseignantService.findById(evaluation.getEnseignant().getId());
+        Etudiant etudiant = etudiantService.findById(evaluation.getEtudiant().getId());
 
-        String req = "INSERT INTO Evaluation (enseignant_id, etudiant_id, note, commentaire) VALUES (?, ?, ?, ?)";
+        if (enseignant == null || etudiant == null) {
+            System.out.println("Impossible de créer l'évaluation: enseignant ou étudiant non trouvé");
+            return false;
+        }
+
+        String req = "INSERT INTO Evaluation (enseignant, etudiant, note, commentaire) VALUES (?, ?, ?, ?)";
         try {
-            PreparedStatement ps = connexion.getCn().prepareStatement(req);
+            PreparedStatement ps = connexion.getCn().prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, evaluation.getEnseignant().getId());
             ps.setInt(2, evaluation.getEtudiant().getId());
             ps.setDouble(3, evaluation.getNote());
             ps.setString(4, evaluation.getCommentaire());
-            ps.executeUpdate();
+            int affectedRows = ps.executeUpdate();
+            
+            if (affectedRows == 0) {
+                return false;
+            }
+            
+            // Récupérer l'ID généré
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                evaluation.setId(generatedKeys.getInt(1));
+            }
             return true;
         } catch (SQLException ex) {
             System.out.println("Erreur lors de l'insertion de l'évaluation : " + ex.getMessage());
@@ -42,7 +60,22 @@ public class EvaluationService implements IDao<Evaluation> {
 
     @Override
     public Evaluation findById(int id) {
-        return null; // Non implémentée
+        String req = "SELECT * FROM Evaluation WHERE id = ?";
+        try {
+            PreparedStatement ps = connexion.getCn().prepareStatement(req);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Enseignant enseignant = enseignantService.findById(rs.getInt("enseignant"));
+                Etudiant etudiant = etudiantService.findById(rs.getInt("etudiant"));
+                double note = rs.getDouble("note");
+                String commentaire = rs.getString("commentaire");
+                return new Evaluation(id, enseignant, etudiant, note, commentaire);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Erreur lors de la recherche de l'évaluation : " + ex.getMessage());
+        }
+        return null;
     }
 
     @Override
@@ -53,11 +86,12 @@ public class EvaluationService implements IDao<Evaluation> {
             PreparedStatement ps = connexion.getCn().prepareStatement(req);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Enseignant enseignant = enseignantService.findById(rs.getInt("enseignant_id"));
-                Etudiant etudiant = etudiantService.findById(rs.getInt("etudiant_id"));
+                int id = rs.getInt("id");
+                Enseignant enseignant = enseignantService.findById(rs.getInt("enseignant"));
+                Etudiant etudiant = etudiantService.findById(rs.getInt("etudiant"));
                 double note = rs.getDouble("note");
                 String commentaire = rs.getString("commentaire");
-                evaluations.add(new Evaluation(enseignant, etudiant, note, commentaire));
+                evaluations.add(new Evaluation(id, enseignant, etudiant, note, commentaire));
             }
         } catch (SQLException ex) {
             System.out.println("Erreur lors de la récupération des évaluations : " + ex.getMessage());
@@ -67,13 +101,14 @@ public class EvaluationService implements IDao<Evaluation> {
 
     @Override
     public boolean update(Evaluation evaluation) {
-        String req = "UPDATE Evaluation SET note = ?, commentaire = ? WHERE enseignant_id = ? AND etudiant_id = ?";
+        String req = "UPDATE Evaluation SET enseignant = ?, etudiant = ?, note = ?, commentaire = ? WHERE id = ?";
         try {
             PreparedStatement ps = connexion.getCn().prepareStatement(req);
-            ps.setDouble(1, evaluation.getNote());
-            ps.setString(2, evaluation.getCommentaire());
-            ps.setInt(3, evaluation.getEnseignant().getId());
-            ps.setInt(4, evaluation.getEtudiant().getId());
+            ps.setInt(1, evaluation.getEnseignant().getId());
+            ps.setInt(2, evaluation.getEtudiant().getId());
+            ps.setDouble(3, evaluation.getNote());
+            ps.setString(4, evaluation.getCommentaire());
+            ps.setInt(5, evaluation.getId());
             ps.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -84,11 +119,10 @@ public class EvaluationService implements IDao<Evaluation> {
 
     @Override
     public boolean delete(Evaluation evaluation) {
-        String req = "DELETE FROM Evaluation WHERE enseignant_id = ? AND etudiant_id = ?";
+        String req = "DELETE FROM Evaluation WHERE id = ?";
         try {
             PreparedStatement ps = connexion.getCn().prepareStatement(req);
-            ps.setInt(1, evaluation.getEnseignant().getId());
-            ps.setInt(2, evaluation.getEtudiant().getId());
+            ps.setInt(1, evaluation.getId());
             ps.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -97,24 +131,38 @@ public class EvaluationService implements IDao<Evaluation> {
         return false;
     }
 
-    public List<Evaluation> filtrerParEnseignant(int enseignantId) {
-        List<Evaluation> evaluations = findAll(); // Charge les données de la base de données
-        List<Evaluation> result = new ArrayList<>();
-        for (Evaluation e : evaluations) {
-            if (e.getEnseignant().getId() == enseignantId) {
-                result.add(e);
+    public List<Evaluation> filtrerParEnseignant(Enseignant enseignant) {
+        List<Evaluation> evaluations = new ArrayList<>();
+        String req = "SELECT * FROM Evaluation WHERE enseignant = ?";
+        try {
+            PreparedStatement ps = connexion.getCn().prepareStatement(req);
+            ps.setInt(1, enseignant.getId());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                Etudiant etudiant = etudiantService.findById(rs.getInt("etudiant"));
+                double note = rs.getDouble("note");
+                String commentaire = rs.getString("commentaire");
+                evaluations.add(new Evaluation(id, enseignant, etudiant, note, commentaire));
             }
+        } catch (SQLException ex) {
+            System.out.println("Erreur lors du filtrage des évaluations : " + ex.getMessage());
         }
-        return result;
+        return evaluations;
     }
 
-    public List<String> consulterCommentaires(int enseignantId) {
-        List<Evaluation> evaluations = findAll(); // Charge les données de la base de données
+    public List<String> consulterCommentaires(Enseignant enseignant) {
         List<String> commentaires = new ArrayList<>();
-        for (Evaluation e : evaluations) {
-            if (e.getEnseignant().getId() == enseignantId) {
-                commentaires.add(e.getCommentaire());
+        String req = "SELECT commentaire FROM Evaluation WHERE enseignant = ?";
+        try {
+            PreparedStatement ps = connexion.getCn().prepareStatement(req);
+            ps.setInt(1, enseignant.getId());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                commentaires.add(rs.getString("commentaire"));
             }
+        } catch (SQLException ex) {
+            System.out.println("Erreur lors de la consultation des commentaires : " + ex.getMessage());
         }
         return commentaires;
     }
