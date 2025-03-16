@@ -48,6 +48,7 @@ public class Test {
         // Création d'étudiants
         etudiantService.create(new Etudiant(1, "Ali", "Ben", "ali@gmail.com"));
         etudiantService.create(new Etudiant(2, "Sara", "Lem", "sara@gmail.com"));
+        etudiantService.create(new Etudiant(3, "Mery", "Ham", "mery@gmail.com"));
 
         // Récupération d'un étudiant pour modification
         Etudiant etudiant = etudiantService.findById(1);
@@ -82,7 +83,7 @@ public class Test {
         // Vérification des évaluations
         List<Evaluation> evaluations = evaluationService.findAll();
         for (Evaluation eva : evaluations) {
-            System.out.println("Évaluation " + eva.getId() + " : " + eva.getEtudiant().getNom() + " a été évalué par " + eva.getEnseignant().getNom());
+            System.out.println("Évaluation "  + eva.getEtudiant().getNom() + " a été évalué par " + eva.getEnseignant().getNom());
         }
 
         // Suppression d'une évaluation
