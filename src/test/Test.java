@@ -30,7 +30,7 @@ public class Test {
         enseignantService.create(new Enseignant(2, "Martin", "Alice", "Physique"));
         enseignantService.create(new Enseignant(3, "Mohammed", "Ali", "Arabe"));
 
-        // Récupération d'un enseignant pour modification
+        // Modification de l'enseignant Dupont
         Enseignant enseignant = enseignantService.findById(1);
         if (enseignant != null) {
             System.out.println("Enseignant trouvé : " + enseignant.getNom());
@@ -50,7 +50,7 @@ public class Test {
         etudiantService.create(new Etudiant(2, "Sara", "Lem", "sara@gmail.com"));
         etudiantService.create(new Etudiant(3, "Mery", "Ham", "mery@gmail.com"));
 
-        // Récupération d'un étudiant pour modification
+        // Modification d'un étudiant
         Etudiant etudiant = etudiantService.findById(1);
         if (etudiant != null) {
             System.out.println("Étudiant trouvé : " + etudiant.getNom() + " " + etudiant.getPrenom() + " " + etudiant.getEmail());
@@ -65,44 +65,45 @@ public class Test {
             System.out.println(et.getNom() + " " + et.getPrenom() + " - " + et.getEmail());
         }
 
-        // Création d'évaluations
-        boolean eval1 = evaluationService.create(new Evaluation(enseignant, etudiant, 85.0, "Très bonne performance"));
-        boolean eval2 = evaluationService.create(new Evaluation(enseignant, etudiant, 90.0, "Excellente participation"));
-        boolean eval3 = evaluationService.create(new Evaluation(enseignant, etudiant, 100.0, "Very good"));
+        // Création de plusieurs évaluations
+        Evaluation[] evaluationsArray = {
+            new Evaluation(enseignant, etudiant, 85.0, "Très bonne performance"),
+            new Evaluation(enseignant, etudiant, 90.0, "Excellente participation"),
+            new Evaluation(enseignant, etudiant, 100.0, "Very good")
+        };
 
-        if (eval1) {
-            System.out.println("Évaluation 1 ajoutée avec succès !");
-        }
-        if (eval2) {
-            System.out.println("Évaluation 2 ajoutée avec succès !");
-        }
-        if (eval3) {
-            System.out.println("Évaluation 3 ajoutée avec succès !");
-        }
-
-        // Vérification des évaluations
-        List<Evaluation> evaluations = evaluationService.findAll();
-        for (Evaluation eva : evaluations) {
-            System.out.println("Évaluation "  + eva.getEtudiant().getNom() + " a été évalué par " + eva.getEnseignant().getNom());
-        }
-
-        // Suppression d'une évaluation
-        if (!evaluations.isEmpty()) {
-            Evaluation evaluationToDelete = evaluations.get(0);
-            evaluationService.delete(evaluationToDelete);
-            System.out.println("Évaluation supprimée : " + evaluationToDelete.getEtudiant().getNom() + " - " + evaluationToDelete.getEnseignant().getNom());
-        }
-
-        // Affichage des évaluations restantes
-        List<Evaluation> evaluationsRestantes = evaluationService.findAll();
-        System.out.println("Évaluations restantes :");
-        if (evaluationsRestantes.isEmpty()) {
-            System.out.println("Aucune évaluation trouvée.");
-        } else {
-            for (Evaluation eval : evaluationsRestantes) {
-                System.out.println(eval.getEtudiant().getNom() + " a été évalué par " + eval.getEnseignant().getNom()
-                        + " avec la note " + eval.getNote());
+        for (Evaluation eval : evaluationsArray) {
+            if (evaluationService.create(eval)) {
+                System.out.println("Évaluation ajoutée avec succès !");
             }
+        }
+
+        // Création de nouvelles évaluations pour d'autres enseignants et étudiants
+        Enseignant enseignant2 = enseignantService.findById(2);
+        Enseignant enseignant3 = enseignantService.findById(3);
+
+        Etudiant etudiant2 = etudiantService.findById(2);
+        Etudiant etudiant3 = etudiantService.findById(3);
+
+        Evaluation[] newEvaluations = {
+            new Evaluation(enseignant2, etudiant2, 75.0, "Participation satisfaisante"),
+            new Evaluation(enseignant3, etudiant3, 92.0, "Très bon niveau en arabe"),
+            new Evaluation(enseignant2, etudiant3, 88.0, "Bonne compréhension des concepts"),
+            new Evaluation(enseignant3, etudiant2, 81.0, "Participation active en classe")
+        };
+
+        for (Evaluation eval : newEvaluations) {
+            if (evaluationService.create(eval)) {
+                System.out.println("Évaluation ajoutée avec succès !");
+            }
+        }
+
+        // Affichage de toutes les évaluations
+        List<Evaluation> evaluations = evaluationService.findAll();
+        System.out.println("\nListe complète des évaluations :");
+        for (Evaluation eval : evaluations) {
+            System.out.println(eval.getEtudiant().getNom() + " " + eval.getEtudiant().getPrenom() + " a été évalué par " + eval.getEnseignant().getNom() +
+                               " (" + eval.getEnseignant().getMatiere() + ") avec la note " + eval.getNote() + " - Commentaire : " + eval.getCommentaire());
         }
     }
 }

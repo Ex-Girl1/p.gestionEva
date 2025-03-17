@@ -5,8 +5,6 @@
  */
 package gui;
 
-import gui.EvaluationForm;
-
 /**
  *
  * @author hp
@@ -19,7 +17,8 @@ public class MDIApplication extends javax.swing.JFrame {
     public MDIApplication() {
         initComponents();
         this.setTitle("Gestion d' évaluation des enseignants");
-        
+        this.setExtendedState(MAXIMIZED_BOTH); // Maximized window
+
     }
 
     /**
@@ -40,9 +39,8 @@ public class MDIApplication extends javax.swing.JFrame {
         EvaluationMenuItem = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
-        AnalyseCommantaire = new javax.swing.JMenuItem();
-        copyMenuItem = new javax.swing.JMenuItem();
-        pasteMenuItem = new javax.swing.JMenuItem();
+        EvaluationParEnseignant = new javax.swing.JMenuItem();
+        SearchEnseignant = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         contentMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
@@ -93,24 +91,25 @@ public class MDIApplication extends javax.swing.JFrame {
         menuBar.add(fileMenu);
 
         editMenu.setMnemonic('e');
-        editMenu.setText("Statistique");
+        editMenu.setText("Rechreche");
 
-        AnalyseCommantaire.setMnemonic('t');
-        AnalyseCommantaire.setText("Moyenne des évaluations par enseignant");
-        AnalyseCommantaire.addActionListener(new java.awt.event.ActionListener() {
+        EvaluationParEnseignant.setMnemonic('t');
+        EvaluationParEnseignant.setText("Evaluation par enseignant");
+        EvaluationParEnseignant.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AnalyseCommantaireActionPerformed(evt);
+                EvaluationParEnseignantActionPerformed(evt);
             }
         });
-        editMenu.add(AnalyseCommantaire);
+        editMenu.add(EvaluationParEnseignant);
 
-        copyMenuItem.setMnemonic('y');
-        copyMenuItem.setText("Analyse des commentaires");
-        editMenu.add(copyMenuItem);
-
-        pasteMenuItem.setMnemonic('p');
-        pasteMenuItem.setText("Distribution des notes par matière");
-        editMenu.add(pasteMenuItem);
+        SearchEnseignant.setMnemonic('y');
+        SearchEnseignant.setText("Enseignant");
+        SearchEnseignant.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SearchEnseignantActionPerformed(evt);
+            }
+        });
+        editMenu.add(SearchEnseignant);
 
         menuBar.add(editMenu);
 
@@ -165,11 +164,19 @@ public class MDIApplication extends javax.swing.JFrame {
         ef.setVisible(true);
     }//GEN-LAST:event_EvaluationMenuItemActionPerformed
 
-    private void AnalyseCommantaireActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnalyseCommantaireActionPerformed
-        ;
-        
-   
-    }//GEN-LAST:event_AnalyseCommantaireActionPerformed
+    private void EvaluationParEnseignantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EvaluationParEnseignantActionPerformed
+        EvaluationParEnseignant efe = new EvaluationParEnseignant();
+        desktopPane.add(efe);
+        efe.setVisible(true);
+
+
+    }//GEN-LAST:event_EvaluationParEnseignantActionPerformed
+
+    private void SearchEnseignantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchEnseignantActionPerformed
+        SearchEnseignant se = new SearchEnseignant();
+        desktopPane.add(se);
+        se.setVisible(true);
+    }//GEN-LAST:event_SearchEnseignantActionPerformed
 
     /**
      * @param args the command line arguments
@@ -207,13 +214,13 @@ public class MDIApplication extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem AnalyseCommantaire;
     private javax.swing.JMenuItem EnseignantMenuItem;
     private javax.swing.JMenuItem EtudiantMenuItem;
     private javax.swing.JMenuItem EvaluationMenuItem;
+    private javax.swing.JMenuItem EvaluationParEnseignant;
+    private javax.swing.JMenuItem SearchEnseignant;
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JMenuItem contentMenuItem;
-    private javax.swing.JMenuItem copyMenuItem;
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exitMenuItem;
@@ -221,7 +228,6 @@ public class MDIApplication extends javax.swing.JFrame {
     private javax.swing.JMenu helpMenu;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenuItem pasteMenuItem;
     // End of variables declaration//GEN-END:variables
 
 }

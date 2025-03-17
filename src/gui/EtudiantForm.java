@@ -25,6 +25,7 @@ public class EtudiantForm extends javax.swing.JInternalFrame {
      */
     public EtudiantForm() {
         initComponents();
+        this.setTitle("Gestion des étudiants");
         es = new EtudiantService();
         model = (DefaultTableModel) listeEtudiants.getModel();
         loadEtudiant();
@@ -92,8 +93,6 @@ public class EtudiantForm extends javax.swing.JInternalFrame {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/icons8-nouveau-message-46.png"))); // NOI18N
         jLabel3.setText("Email:");
-
-        txtNom.setForeground(new java.awt.Color(204, 204, 204));
 
         bnAdd.setBackground(new java.awt.Color(0, 153, 51));
         bnAdd.setText("Ajouter");

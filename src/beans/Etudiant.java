@@ -79,10 +79,13 @@ public class Etudiant {
     public void setEmail(String email) {
         this.email = email;
     }
+
     @Override
     public String toString() {
-    return "Etudiant{id=" + id + ", nom=" + nom + ", email=" + email + "}";
-}
+        return  this.nom + " " + this.prenom ;
+    }
+    
+
 
     
 }

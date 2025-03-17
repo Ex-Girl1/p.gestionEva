@@ -79,4 +79,9 @@ public class Enseignant {
         this.matiere = matiere;
     }
 
+    @Override
+    public String toString() {
+        return this.nom + " " + this.prenom;
+    }
+
 }

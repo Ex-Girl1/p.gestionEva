@@ -16,7 +16,6 @@ public class Evaluation {
     private double note;
     private String commentaire;
 
-    // Constructeur avec ID
     public Evaluation( Enseignant enseignant, Etudiant etudiant, double note, String commentaire) {
       
         this.enseignant = enseignant;
@@ -58,4 +57,10 @@ public class Evaluation {
     public void setCommentaire(String commentaire) {
         this.commentaire = commentaire;
     }
+
+    @Override
+    public String toString() {
+        return "Evaluation{" + "enseignant=" + enseignant + ", etudiant=" + etudiant + ", note=" + note + ", commentaire=" + commentaire + '}';
+    }
+    
 }

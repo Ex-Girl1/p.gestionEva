@@ -168,11 +168,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtNom">
-          <Properties>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="cc" green="cc" red="cc" type="rgb"/>
-            </Property>
-          </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtPrenom">
         </Component>
