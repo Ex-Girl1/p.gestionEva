@@ -74,3 +74,5 @@ L'application est basée sur une architecture client-serveur :
 - NetBeans (Java) : Pour le développement de l’application.
 - MySQL : Pour la gestion de la base de données.
 - SWING : Pour l'interface graphique et rendre l’application facile à utiliser.
+## Demo :
+- Lien drive : https://drive.google.com/drive/folders/1-2gMBZG_OaxIlqP6I7Bcmhxr0av5d2D5
