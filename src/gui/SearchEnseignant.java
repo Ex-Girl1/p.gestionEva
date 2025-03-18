@@ -7,8 +7,9 @@ package gui;
 
 import beans.Enseignant;
 import java.util.List;
-import java.util.stream.Collectors;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import services.EnseignantService;
 
 /**
@@ -17,14 +18,24 @@ import services.EnseignantService;
  */
 public class SearchEnseignant extends javax.swing.JInternalFrame {
    private EnseignantService ens = new EnseignantService();
+   private DefaultTableModel model;
     /**
      * Creates new form SearchEnseignant
      */
     public SearchEnseignant() {
         this.setTitle("Recherche des enseignants");
         initComponents();
+        listeEnseignants.setModel(new javax.swing.DefaultComboBoxModel<>());
+        model = (DefaultTableModel) tableEnseignants.getModel();
+        loadEnseignant();
     }
-
+     private void loadEnseignant() {
+        List<Enseignant> enseignants = ens.findAll();
+        listeEnseignants.removeAllItems();
+        for (Enseignant e : enseignants) {
+            listeEnseignants.addItem(e.getNom());
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -36,9 +47,12 @@ public class SearchEnseignant extends javax.swing.JInternalFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        bnSearch = new javax.swing.JButton();
-        txtRecherche = new javax.swing.JTextField();
+        listeEnseignants = new javax.swing.JComboBox();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableEnseignants = new javax.swing.JTable();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
@@ -52,11 +66,10 @@ public class SearchEnseignant extends javax.swing.JInternalFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/icons8-homme-prof-48.png"))); // NOI18N
         jLabel1.setText("Enseignant:");
 
-        bnSearch.setBackground(new java.awt.Color(0, 102, 255));
-        bnSearch.setText("Recherche");
-        bnSearch.addActionListener(new java.awt.event.ActionListener() {
+        listeEnseignants.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        listeEnseignants.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bnSearchActionPerformed(evt);
+                listeEnseignantsActionPerformed(evt);
             }
         });
 
@@ -67,11 +80,9 @@ public class SearchEnseignant extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(67, 67, 67)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(txtRecherche, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
-                .addComponent(bnSearch)
-                .addGap(75, 75, 75))
+                .addGap(68, 68, 68)
+                .addComponent(listeEnseignants, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(142, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -79,9 +90,37 @@ public class SearchEnseignant extends javax.swing.JInternalFrame {
                 .addContainerGap(53, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtRecherche, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bnSearch))
+                    .addComponent(listeEnseignants, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(72, 72, 72))
+        );
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Liste des enseignants", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Times New Roman", 1, 12))); // NOI18N
+
+        tableEnseignants.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Id", "Nom", "Prenom", "Matiere"
+            }
+        ));
+        jScrollPane1.setViewportView(tableEnseignants);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -89,51 +128,41 @@ public class SearchEnseignant extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(133, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void bnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bnSearchActionPerformed
-        String keyword = txtRecherche.getText().trim().toLowerCase();
-    
-    if (keyword.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Veuillez entrer un nom d'enseignant à rechercher.");
-        return;
-    }
-    
-    List<Enseignant> resultats = ens.findAll().stream()
-        .filter(e -> e.getNom().toLowerCase().contains(keyword))
-        .collect(Collectors.toList());
-
-    
-    if (resultats.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Aucun enseignant trouvé avec ce nom.");
-    } else {
-        StringBuilder resultMessage = new StringBuilder("Enseignants trouvés :\n");
-        
-        for (Enseignant en : resultats) {
-            resultMessage.append("ID: ").append(en.getId())
-                         .append(" | Nom: ").append(en.getNom())
-                         .append(" | Matiere: ").append(en.getMatiere())
-                         .append("\n");
-        }
-        
-        JOptionPane.showMessageDialog(this, resultMessage.toString());
-    }
-    }//GEN-LAST:event_bnSearchActionPerformed
+    private void listeEnseignantsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listeEnseignantsActionPerformed
+        String selectedNom = (String) listeEnseignants.getSelectedItem();
+        if (selectedNom != null && !selectedNom.trim().isEmpty()) {
+            List<Enseignant> enseignantsMemeNom = ens.rechercherEnseignant(selectedNom);
+            model.setRowCount(0);
+            for (Enseignant e : enseignantsMemeNom) {
+                model.addRow(new Object[]{e.getId(), e.getNom(), e.getPrenom(), e.getMatiere()});
+            }
+        } 
+    }//GEN-LAST:event_listeEnseignantsActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bnSearch;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField txtRecherche;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JComboBox listeEnseignants;
+    private javax.swing.JTable tableEnseignants;
     // End of variables declaration//GEN-END:variables
+
+   
 }

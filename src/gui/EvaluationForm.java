@@ -19,10 +19,12 @@ import services.EvaluationService;
  * @author hp
  */
 public class EvaluationForm extends javax.swing.JInternalFrame {
+
     private EvaluationService evs;
     private EnseignantService ens;
     private EtudiantService es;
-    private DefaultTableModel model; 
+    private DefaultTableModel model;
+
     /**
      * Creates new form EvaluationForm
      */
@@ -31,7 +33,7 @@ public class EvaluationForm extends javax.swing.JInternalFrame {
         this.setTitle("Gestion des evaluations");
         listeEtudiants.setModel(new javax.swing.DefaultComboBoxModel<>());//liste vide
         listeEnseignants.setModel(new javax.swing.DefaultComboBoxModel<>());//liste vide
-        model=(DefaultTableModel)listEvaluation.getModel();
+        model = (DefaultTableModel) listEvaluation.getModel();
         evs = new EvaluationService();
         es = new EtudiantService();
         ens = new EnseignantService();
@@ -39,26 +41,29 @@ public class EvaluationForm extends javax.swing.JInternalFrame {
         loadEtudiant();
         loadEnseignant();
     }
-    public void load(){
+
+    public void load() {
         model.setRowCount(0);
-        for(Evaluation e : evs.findAll()){
+        for (Evaluation e : evs.findAll()) {
             model.addRow(new Object[]{
                 e.getEnseignant().getId(),
                 e.getEtudiant().getId(),
-                e.getNote(), 
+                e.getNote(),
                 e.getCommentaire()});
         }
     }
-     public void loadEtudiant() {
+
+    public void loadEtudiant() {
         listeEtudiants.addItem("Choisir un étudiant");
         for (Etudiant e : es.findAll()) {
             listeEtudiants.addItem(e);
         }
     }
-     public void loadEnseignant() {
+
+    public void loadEnseignant() {
         listeEnseignants.addItem("Choisir un enseignant");
         for (Enseignant en : ens.findAll()) {
-           listeEnseignants.addItem(en);
+            listeEnseignants.addItem(en);
         }
     }
 
@@ -244,12 +249,13 @@ public class EvaluationForm extends javax.swing.JInternalFrame {
         double note = Double.parseDouble(txtNote.getText().toString());
         String commantaire = txtCommantaire.getText().toString();
 
-        if(evs.create(new Evaluation(enseignantselected,etudiantselescted,note, commantaire))){
+        if (evs.create(new Evaluation(enseignantselected, etudiantselescted, note, commantaire))) {
             JOptionPane.showMessageDialog(this, "Bien Enregistrée");
-        }else{
-            JOptionPane.showConfirmDialog(this, "Réssayer");
-            load();
+            load(); // Charger les évaluations immédiatement après l'ajout
+        } else {
+            JOptionPane.showMessageDialog(this, "Réessayer");
         }
+
     }//GEN-LAST:event_bnAddActionPerformed
 
 

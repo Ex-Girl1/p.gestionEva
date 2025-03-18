@@ -28,6 +28,7 @@ public class EnseignantForm extends javax.swing.JInternalFrame {
         this.setTitle("Gestion des enseignants");
         ens = new EnseignantService();
         model = (DefaultTableModel) listeEnseignants.getModel();
+        loadEnseignant();
         
     }
     void loadEnseignant(){

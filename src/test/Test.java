@@ -8,22 +8,28 @@ package test;
 import beans.Enseignant;
 import beans.Etudiant;
 import beans.Evaluation;
+import beans.User;
 import java.util.List;
 import services.EnseignantService;
 import services.EtudiantService;
 import services.EvaluationService;
+import services.UserService;
 
 /**
  *
  * @author hp
  */
-
 public class Test {
 
     public static void main(String[] args) {
         EnseignantService enseignantService = new EnseignantService();
         EtudiantService etudiantService = new EtudiantService();
         EvaluationService evaluationService = new EvaluationService();
+        UserService userService = new UserService();
+        User user = new User("IkramELKHATTAB", "1234");
+        userService.addUser(user);
+        boolean isAuthenticated = userService.authenticate("IkramELKHATTAB", "1234");
+        System.out.println(isAuthenticated ? "Authentification réussie !" : "Échec de l'authentification.");
 
         // Création d'enseignants
         enseignantService.create(new Enseignant(1, "Dupont", "Jean", "Mathématiques"));
@@ -102,8 +108,8 @@ public class Test {
         List<Evaluation> evaluations = evaluationService.findAll();
         System.out.println("\nListe complète des évaluations :");
         for (Evaluation eval : evaluations) {
-            System.out.println(eval.getEtudiant().getNom() + " " + eval.getEtudiant().getPrenom() + " a été évalué par " + eval.getEnseignant().getNom() +
-                               " (" + eval.getEnseignant().getMatiere() + ") avec la note " + eval.getNote() + " - Commentaire : " + eval.getCommentaire());
+            System.out.println(eval.getEtudiant().getNom() + " " + eval.getEtudiant().getPrenom() + " a été évalué par " + eval.getEnseignant().getNom()
+                    + " (" + eval.getEnseignant().getMatiere() + ") avec la note " + eval.getNote() + " - Commentaire : " + eval.getCommentaire());
         }
     }
 }

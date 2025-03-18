@@ -6,6 +6,7 @@
 package gui;
 
 import javax.swing.JOptionPane;
+import services.UserService;
 
 /**
  *
@@ -148,15 +149,19 @@ public class Main extends javax.swing.JFrame {
 
     private void bnConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bnConnexionActionPerformed
         // TODO add your handling code here:
-        String login = txtLogin.getText().toString();
-        String password = txtPassword.getText().toString();
-        if (login.equals("ikram@gmail.com") && password.equals("123")) {
-            MDIApplication mdi = new MDIApplication();
+         String login = txtLogin.getText().trim();
+        String password = new String(txtPassword.getPassword()).trim();
+
+        UserService userService = new UserService();
+
+        if (userService.authenticate(login, password)) {
+            MDIApplication mdi = MDIApplication.getInstance();
             mdi.setVisible(true);
             this.setVisible(false);
         } else {
             JOptionPane.showMessageDialog(this, "Login ou mot de passe incorrect");
         }
+
     }//GEN-LAST:event_bnConnexionActionPerformed
 
     /**

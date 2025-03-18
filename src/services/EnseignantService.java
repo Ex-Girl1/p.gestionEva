@@ -146,5 +146,6 @@ public List<Enseignant> findAll() {
         }
         return false; //To change body of generated methods, choose Tools | Templates.
     }
+    
 
 }

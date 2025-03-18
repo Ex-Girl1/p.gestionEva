@@ -5,20 +5,29 @@
  */
 package gui;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author hp
  */
 public class MDIApplication extends javax.swing.JFrame {
-
+ private static MDIApplication instance;
     /**
      * Creates new form MDIApplication
      */
     public MDIApplication() {
         initComponents();
         this.setTitle("Gestion d' évaluation des enseignants");
-        this.setExtendedState(MAXIMIZED_BOTH); // Maximized window
+        this.setExtendedState(MAXIMIZED_BOTH); 
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// Maximized window
 
+    }
+  public static MDIApplication getInstance() {
+        if (instance == null) {
+            instance = new MDIApplication();
+        }
+        return instance;
     }
 
     /**
@@ -141,41 +150,60 @@ public class MDIApplication extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    private void centerInternalFrame(javax.swing.JInternalFrame frame) {
+    int x = (desktopPane.getWidth() - frame.getWidth()) / 2;
+    int y = (desktopPane.getHeight() - frame.getHeight()) / 2;
+    frame.setLocation(x, y);
+}
+private void closeAllInternalFrames() {
+    for (javax.swing.JInternalFrame frame : desktopPane.getAllFrames()) {
+        frame.dispose();
+    }
+}
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void EtudiantMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EtudiantMenuItemActionPerformed
+       closeAllInternalFrames();
         EtudiantForm ef = new EtudiantForm();
         desktopPane.add(ef);
         ef.setVisible(true);
+        centerInternalFrame(ef);
     }//GEN-LAST:event_EtudiantMenuItemActionPerformed
 
     private void EnseignantMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnseignantMenuItemActionPerformed
+        closeAllInternalFrames();
         EnseignantForm enf = new EnseignantForm();
         desktopPane.add(enf);
         enf.setVisible(true);
+        centerInternalFrame(enf);
     }//GEN-LAST:event_EnseignantMenuItemActionPerformed
 
     private void EvaluationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EvaluationMenuItemActionPerformed
+        closeAllInternalFrames();
         EvaluationForm ef = new EvaluationForm();
         desktopPane.add(ef);
         ef.setVisible(true);
+        centerInternalFrame(ef);
     }//GEN-LAST:event_EvaluationMenuItemActionPerformed
 
     private void EvaluationParEnseignantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EvaluationParEnseignantActionPerformed
+        closeAllInternalFrames();
         EvaluationParEnseignant efe = new EvaluationParEnseignant();
         desktopPane.add(efe);
         efe.setVisible(true);
-
+        centerInternalFrame(efe);
 
     }//GEN-LAST:event_EvaluationParEnseignantActionPerformed
 
     private void SearchEnseignantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchEnseignantActionPerformed
+        closeAllInternalFrames();
         SearchEnseignant se = new SearchEnseignant();
         desktopPane.add(se);
         se.setVisible(true);
+        centerInternalFrame(se);
     }//GEN-LAST:event_SearchEnseignantActionPerformed
 
     /**
@@ -229,5 +257,8 @@ public class MDIApplication extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuBar menuBar;
     // End of variables declaration//GEN-END:variables
+
+    
+    
 
 }
