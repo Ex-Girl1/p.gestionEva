@@ -28,14 +28,7 @@ public class Test {
         UserService userService = new UserService();
         User user = new User("IkramELKHATTAB", "1234");
         userService.addUser(user);
-        boolean isAuthenticated = userService.authenticate("IkramELKHATTAB", "1234");
-        System.out.println(isAuthenticated ? "Authentification réussie !" : "Échec de l'authentification.");
-        String newPassword = userService.resetPassword("IkramELKHATTAB");
-        if (newPassword != null) {
-            System.out.println("Nouveau mot de passe généré : " + newPassword);
-        } else {
-            System.out.println("Erreur lors de la réinitialisation du mot de passe.");
-        }
+        
         // Création d'enseignants
         enseignantService.create(new Enseignant(1, "Dupont", "Jean", "Mathématiques"));
         enseignantService.create(new Enseignant(2, "Martin", "Alice", "Physique"));

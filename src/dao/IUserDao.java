@@ -18,4 +18,5 @@ public interface IUserDao {
     User findUserByLogin(String login);
 
     boolean authenticate(String login, String password);
+   
 }

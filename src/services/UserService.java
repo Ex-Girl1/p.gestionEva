@@ -70,7 +70,7 @@ public class UserService implements IUserDao {
         }
         return false;
     }
-    public String resetPassword(String login) {
+   public String resetPassword(String login) {
         String newPassword = generateTemporaryPassword();
         String query = "UPDATE user SET password = SHA1(?) WHERE login = ?";
         
