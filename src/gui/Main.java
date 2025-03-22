@@ -5,8 +5,16 @@
  */
 package gui;
 
+import java.util.Properties;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import services.UserService;
 
 /**
@@ -14,6 +22,8 @@ import services.UserService;
  * @author hp
  */
 public class Main extends javax.swing.JFrame {
+
+   
 
     /**
      * Creates new form Main
@@ -38,7 +48,7 @@ public class Main extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtLogin = new javax.swing.JTextField();
         txtPassword = new javax.swing.JPasswordField();
-        bnOublier = new javax.swing.JButton();
+        bnPasswordOublier = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         bnConnexion1 = new javax.swing.JButton();
 
@@ -69,12 +79,12 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        bnOublier.setBackground(new java.awt.Color(0, 102, 102));
-        bnOublier.setFont(new java.awt.Font("Rockwell Extra Bold", 1, 12)); // NOI18N
-        bnOublier.setText("Mot de passe oublier");
-        bnOublier.addActionListener(new java.awt.event.ActionListener() {
+        bnPasswordOublier.setBackground(new java.awt.Color(0, 102, 102));
+        bnPasswordOublier.setFont(new java.awt.Font("Rockwell Extra Bold", 1, 12)); // NOI18N
+        bnPasswordOublier.setText("Mot de passe oublier");
+        bnPasswordOublier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bnOublierActionPerformed(evt);
+                bnPasswordOublierActionPerformed(evt);
             }
         });
 
@@ -113,7 +123,7 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addGap(242, 242, 242))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(bnOublier, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(bnPasswordOublier, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(174, 174, 174))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(bnConnexion1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -135,7 +145,7 @@ public class Main extends javax.swing.JFrame {
                 .addGap(33, 33, 33)
                 .addComponent(bnConnexion1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bnOublier)
+                .addComponent(bnPasswordOublier)
                 .addContainerGap())
         );
 
@@ -161,36 +171,69 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPasswordActionPerformed
 
-    private void bnOublierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bnOublierActionPerformed
-        String login = txtLogin.getText().trim();
-
-        if (login.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Veuillez entrer votre login pour réinitialiser le mot de passe.");
-            txtLogin.requestFocus();
-            return;
-        }
-
+    private void bnPasswordOublierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bnPasswordOublierActionPerformed
+     String login = txtLogin.getText().trim();
         UserService userService = new UserService();
-        String temporaryPassword = userService.resetPassword(login);
 
-        if (temporaryPassword != null) {
-                JTextField passwordField = new JTextField(temporaryPassword);
-            passwordField.setEditable(true);  // Permet de copier le texte
-            passwordField.setSelectionStart(0);  // Sélectionne le texte automatiquement
-            passwordField.setSelectionEnd(temporaryPassword.length());
+        String email = JOptionPane.showInputDialog(this, "Entrez votre adresse email");
 
-            Object[] message = {
-                "Votre mot de passe temporaire est :", passwordField,
-                "Veuillez le copier puis le coller dans le champ de mot de passe pour vous connecter."
-            };
+        if (userService.checkUserExists(login) && email != null && !email.isEmpty()) {
 
-            JOptionPane.showMessageDialog(this, message, "Mot de passe temporaire", JOptionPane.INFORMATION_MESSAGE);
-            txtPassword.requestFocus(); // Place le curseur dans le champ de mot de passe pour coller facilement
+            String reponseSecrete = JOptionPane.showInputDialog(this, "Quelle est votre couleur préférée ?");
+            String bonneReponse = "rouge";
+
+            if (reponseSecrete != null && reponseSecrete.trim().equalsIgnoreCase(bonneReponse)) {
+
+                String nouveauMotDePasse = JOptionPane.showInputDialog(this, "Entrez votre nouveau mot de passe");
+
+                if (nouveauMotDePasse != null && !nouveauMotDePasse.trim().isEmpty()) {
+                    boolean result = userService.changerMotDePasse(login, nouveauMotDePasse);
+
+                    Properties properties = new Properties();
+                    properties.put("mail.smtp.host", "smtp.gmail.com");
+                    properties.put("mail.smtp.port", "587");
+                    properties.put("mail.smtp.starttls.enable", "true");
+                    properties.put("mail.smtp.auth", "true");
+
+                    Session session = Session.getInstance(properties, new Authenticator() {
+                        @Override
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication("i.elkhattab9162@uca.ac.ma", "xrgn dlna chnf kygj");
+                        }
+                    });
+
+                    try {
+
+                        Message message = new MimeMessage(session);
+                        message.setFrom(new InternetAddress("i.elkhattab9162@uca.ac.ma"));
+                        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+                        message.setSubject("Récupération de mot de passe");
+                        String messageContent = "Bonjour,\n\nVotre nouveau mot de passe est : " + nouveauMotDePasse + "\n\nCordialement,";
+                        message.setText(messageContent);
+
+                        Transport.send(message);
+
+                        if (result) {
+                            JOptionPane.showMessageDialog(this, "Mot de passe changé avec succès !");
+                            JOptionPane.showMessageDialog(this, "Votre nouveau mot de passe a été envoyé à votre adresse email.");
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Échec du changement de mot de passe.");
+                        }
+
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(this, "Échec de l'envoi du mot de passe. Vérifiez l'adresse email.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Le mot de passe ne peut pas être vide.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Réponse incorrecte à la question secrète.");
+            }
         } else {
-            JOptionPane.showMessageDialog(this, "Utilisateur non trouvé.");
-            txtLogin.requestFocus();
+            JOptionPane.showMessageDialog(this, "L'adresse email ne peut pas être vide ou l'utilisateur est inconnu.");
         }
-    }//GEN-LAST:event_bnOublierActionPerformed
+    }//GEN-LAST:event_bnPasswordOublierActionPerformed
 
     private void bnConnexion1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bnConnexion1ActionPerformed
         String login = txtLogin.getText().trim();
@@ -235,16 +278,14 @@ public class Main extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Main().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Main().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bnConnexion1;
-    private javax.swing.JButton bnOublier;
+    private javax.swing.JButton bnPasswordOublier;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;

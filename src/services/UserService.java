@@ -8,18 +8,18 @@ package services;
 import beans.User;
 import connexion.Connexion;
 import dao.IUserDao;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Random;
+
 
 /**
  *
  * @author hp
  */
 public class UserService implements IUserDao {
-
-    private Connexion connexion;
+private Connexion connexion;
 
     public UserService() {
         connexion = Connexion.getInstance();
@@ -58,7 +58,7 @@ public class UserService implements IUserDao {
 
     @Override
     public boolean authenticate(String login, String password) {
-    String req = "SELECT * FROM user WHERE login = ? AND password = SHA1(?)";
+        String req = "SELECT * FROM user WHERE login = ? AND password = SHA1(?)";
         try {
             PreparedStatement ps = connexion.getCn().prepareStatement(req);
             ps.setString(1, login);
@@ -70,38 +70,45 @@ public class UserService implements IUserDao {
         }
         return false;
     }
-   public String resetPassword(String login) {
-        String newPassword = generateTemporaryPassword();
-        String query = "UPDATE user SET password = SHA1(?) WHERE login = ?";
-        
+
+    public boolean changerMotDePasse(String login, String nouveauMotDePasse) {
+        String req = "UPDATE user SET password = SHA1(?) WHERE login = ?";
         try {
-            PreparedStatement pstmt = connexion.getCn().prepareStatement(query);
-            pstmt.setString(1, newPassword);
-            pstmt.setString(2, login);
-            
-            int rowsUpdated = pstmt.executeUpdate();
-            
-            if (rowsUpdated > 0) {
-                return newPassword; // Mot de passe temporaire généré
-            } else {
-                return null; // L'utilisateur n'existe pas
-            }
-        } catch (SQLException e) {
-            System.out.println("Erreur lors de la réinitialisation du mot de passe : " + e.getMessage());
-            
+            PreparedStatement ps = connexion.getCn().prepareStatement(req);
+            ps.setString(1, nouveauMotDePasse);
+            ps.setString(2, login);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException ex) {
+            System.out.println("Erreur lors du changement de mot de passe : " + ex.getMessage());
         }
-        return null;
+        return false;
+    }
+
+    public boolean checkUserExists(String login) {
+        String req = "SELECT * FROM user WHERE login = ?";
+        try {
+            PreparedStatement ps = connexion.getCn().prepareStatement(req);
+            ps.setString(1, login);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        } catch (SQLException ex) {
+            System.out.println("Erreur lors de la vérification de l'utilisateur : " + ex.getMessage());
+        }
+        return false;
     }
     
-    private String generateTemporaryPassword() {
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder(8);
-        for (int i = 0; i < 8; i++) {
-            sb.append(chars.charAt(random.nextInt(chars.length())));
-        }
-        return sb.toString();
+    public boolean updatePassword(String newPassword) {
+    // Exemple fictif - adapte selon ta base de données
+    try {
+        // Requête SQL fictive
+        String query = "UPDATE users SET password = ? WHERE username = 'user1'";
+        System.out.println("Mot de passe mis à jour : " + newPassword);
+        return true;
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
     }
 }
 
-
+}

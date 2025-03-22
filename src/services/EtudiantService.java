@@ -107,4 +107,20 @@ public class EtudiantService implements IDao<Etudiant> {
         }
         return false;
     }
+
+    public int countEtudiants() {
+        int count = 0;
+        String req = "SELECT COUNT(*) as total FROM Etudiant";
+        try {
+            PreparedStatement ps = connexion.getCn().prepareStatement(req);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt("total");
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return count;
+    }
+
 }

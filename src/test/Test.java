@@ -8,12 +8,12 @@ package test;
 import beans.Enseignant;
 import beans.Etudiant;
 import beans.Evaluation;
-import beans.User;
+
 import java.util.List;
 import services.EnseignantService;
 import services.EtudiantService;
 import services.EvaluationService;
-import services.UserService;
+
 
 /**
  *
@@ -25,9 +25,8 @@ public class Test {
         EnseignantService enseignantService = new EnseignantService();
         EtudiantService etudiantService = new EtudiantService();
         EvaluationService evaluationService = new EvaluationService();
-        UserService userService = new UserService();
-        User user = new User("IkramELKHATTAB", "1234");
-        userService.addUser(user);
+        
+        
         
         // Création d'enseignants
         enseignantService.create(new Enseignant(1, "Dupont", "Jean", "Mathématiques"));

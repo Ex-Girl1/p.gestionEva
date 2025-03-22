@@ -16,6 +16,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EvaluationService implements IDao<Evaluation> {
 
@@ -143,4 +145,32 @@ public class EvaluationService implements IDao<Evaluation> {
         }
         return commentaires;
     }
+
+    public Map<Enseignant, Double> calculerMoyenneParEnseignant() {
+        Map<Enseignant, Double> result = new HashMap<>();
+        List<Evaluation> evaluations = findAll();
+
+        Map<Enseignant, List<Double>> notesParEnseignant = new HashMap<>();
+
+        for (Evaluation evaluation : evaluations) {
+            Enseignant enseignant = evaluation.getEnseignant();
+            notesParEnseignant.putIfAbsent(enseignant, new ArrayList<>());
+            notesParEnseignant.get(enseignant).add(evaluation.getNote());
+        }
+
+        for (Map.Entry<Enseignant, List<Double>> entry : notesParEnseignant.entrySet()) {
+            Enseignant enseignant = entry.getKey();
+            List<Double> notes = entry.getValue();
+
+            double somme = 0;
+            for (double note : notes) {
+                somme += note;
+            }
+            double moyenne = somme / notes.size();
+            result.put(enseignant, moyenne);
+        }
+
+        return result;
+    }
+
 }

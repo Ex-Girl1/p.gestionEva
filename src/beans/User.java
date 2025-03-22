@@ -10,7 +10,7 @@ package beans;
  * @author hp
  */
 public class User {
-     private String login;
+    private String login;
     private String password;
 
     public User(String login, String password) {
@@ -38,5 +38,6 @@ public class User {
     public String toString() {
         return "User{" + "login=" + login + ", password=" + password + '}';
     }
+    
     
 }

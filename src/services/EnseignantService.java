@@ -20,7 +20,6 @@ import java.util.List;
  */
 public class EnseignantService implements IDao<Enseignant> {
 
-    
     private Connexion connexion;
 
     public EnseignantService() {
@@ -61,26 +60,25 @@ public class EnseignantService implements IDao<Enseignant> {
     }
 
     @Override
-public List<Enseignant> findAll() {
-    List<Enseignant> enseignants = new ArrayList<>();
-    String req = "SELECT * FROM Enseignant";
-    try {
-        PreparedStatement ps = connexion.getCn().prepareStatement(req);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            enseignants.add(new Enseignant(
-                    rs.getInt("id"),
-                    rs.getString("nom"),
-                    rs.getString("prenom"),
-                    rs.getString("matiere")
-            ));
+    public List<Enseignant> findAll() {
+        List<Enseignant> enseignants = new ArrayList<>();
+        String req = "SELECT * FROM Enseignant";
+        try {
+            PreparedStatement ps = connexion.getCn().prepareStatement(req);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                enseignants.add(new Enseignant(
+                        rs.getInt("id"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("matiere")
+                ));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
-    } catch (SQLException ex) {
-        System.out.println(ex.getMessage());
+        return enseignants;
     }
-    return enseignants;
-}
-
 
     @Override
     public boolean update(Enseignant enseignant) {
@@ -111,27 +109,25 @@ public List<Enseignant> findAll() {
      * @return
      */
     public List<Enseignant> rechercherEnseignant(String nom) {
-    List<Enseignant> result = new ArrayList<>();
-    String req = "SELECT * FROM Enseignant WHERE nom LIKE ?";
-    try {
-        PreparedStatement ps = connexion.getCn().prepareStatement(req);
-        ps.setString(1, "%" + nom + "%");
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            result.add(new Enseignant(
-                    rs.getInt("id"), 
-                    rs.getString("nom"), 
-                    rs.getString("prenom"), 
-                    rs.getString("matiere")
-            ));
+        List<Enseignant> result = new ArrayList<>();
+        String req = "SELECT * FROM Enseignant WHERE nom LIKE ?";
+        try {
+            PreparedStatement ps = connexion.getCn().prepareStatement(req);
+            ps.setString(1, "%" + nom + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                result.add(new Enseignant(
+                        rs.getInt("id"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("matiere")
+                ));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
-    } catch (SQLException ex) {
-        System.out.println(ex.getMessage());
+        return result;
     }
-    return result;
-}
-
-
 
     @Override
     public boolean delete(Enseignant enseignant) {
@@ -146,6 +142,20 @@ public List<Enseignant> findAll() {
         }
         return false; //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    public int countEnseignants() {
+        int count = 0;
+        String req = "SELECT COUNT(*) as total FROM Enseignant";
+        try {
+            PreparedStatement ps = connexion.getCn().prepareStatement(req);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt("total");
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return count;
+    }
 
 }

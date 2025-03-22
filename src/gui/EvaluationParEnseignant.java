@@ -7,6 +7,7 @@ package gui;
 
 import beans.Enseignant;
 import beans.Evaluation;
+import graphes.EvaluationGraph;
 import javax.swing.table.DefaultTableModel;
 import services.EnseignantService;
 import services.EvaluationService;
@@ -53,6 +54,7 @@ public class EvaluationParEnseignant extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         listeEnseignants = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
+        btnAfficherGraphes = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         listEvaluation = new javax.swing.JTable();
@@ -78,6 +80,13 @@ public class EvaluationParEnseignant extends javax.swing.JInternalFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/icons8-homme-prof-48.png"))); // NOI18N
         jLabel1.setText("Enseignant:");
 
+        btnAfficherGraphes.setText("Voir la graphe");
+        btnAfficherGraphes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAfficherGraphesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -88,6 +97,10 @@ public class EvaluationParEnseignant extends javax.swing.JInternalFrame {
                 .addGap(98, 98, 98)
                 .addComponent(listeEnseignants, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(90, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAfficherGraphes)
+                .addGap(143, 143, 143))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -96,7 +109,9 @@ public class EvaluationParEnseignant extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(listeEnseignants, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnAfficherGraphes)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -162,8 +177,13 @@ public class EvaluationParEnseignant extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_listeEnseignantsActionPerformed
 
+    private void btnAfficherGraphesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAfficherGraphesActionPerformed
+        new EvaluationGraph().setVisible(true);
+    }//GEN-LAST:event_btnAfficherGraphesActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAfficherGraphes;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
