@@ -13,7 +13,8 @@ Ce projet est un système de gestion des évaluations des enseignants développ�
 ![image](https://github.com/user-attachments/assets/b983284c-f845-4b8d-8efc-e6b293e6b79c)
 
 ### Digramme de classe:
-![image](https://github.com/user-attachments/assets/191ac399-c474-41b4-bddf-18a24882dcab)
+![image](https://github.com/user-attachments/assets/5643f547-868f-4ae4-b564-4687bc4098bb)
+
 
 
 ## Structure de la Base de Données
