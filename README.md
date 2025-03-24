@@ -10,7 +10,8 @@ Ce projet est un système de gestion des évaluations des enseignants développ�
 - Assurer la confidentialité des données et l'intégrité du processus
 ## Conception des diagrammes
 ### Digramme d'utilisation:
-![image](https://github.com/user-attachments/assets/65e90706-9d41-421d-914a-aa940de83c61)
+![image](https://github.com/user-attachments/assets/a6a2709b-d57d-4239-9c71-05f1aac76735)
+
 
 
 
