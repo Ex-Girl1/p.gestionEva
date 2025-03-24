@@ -1,4 +1,4 @@
-![Designsanstitre-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/2d6ff756-cdeb-42d5-9551-139b439eef6e)# Système de Gestion des Évaluations des Enseignants
+# Système de Gestion des Évaluations des Enseignants
  
 ## Description
 Ce projet est un système de gestion des évaluations des enseignants développé en Java avec une base de données SQL. Il permet de gérer les enseignants, les étudiants et les évaluations faites par les étudiants concernant les enseignants.
