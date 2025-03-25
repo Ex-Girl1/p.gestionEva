@@ -1,13 +1,16 @@
 # Système de Gestion des Évaluations des Enseignants
  
-## Description
+## 🗄️ Description
 Ce projet est un système de gestion des évaluations des enseignants développé en Java avec une base de données SQL. Il permet de gérer les enseignants, les étudiants et les évaluations faites par les étudiants concernant les enseignants.
-## Objectifs
+## 🎯 Objectifs
 - Améliorer la qualité de l'enseignement en permettant aux étudiants de donner leur feedback
 - Faciliter la prise de décision pour les responsables académiques grâce aux données quantitatives et qualitatives
 - Centraliser les données des enseignants, étudiants et évaluations dans un système unifié
 - Permettre des analyses statistiques avec des outils comme les graphiques
 - Assurer la confidentialité des données et l'intégrité du processus
+## 🏷️ Logo de projet
+![Logo](https://github.com/user-attachments/assets/422f2442-19fd-4caf-b22f-4d4a0dfe180b)
+
 ## Conception des diagrammes
 ### Digramme d'utilisation:
 ![image](https://github.com/user-attachments/assets/a6a2709b-d57d-4239-9c71-05f1aac76735)
@@ -21,7 +24,7 @@ Ce projet est un système de gestion des évaluations des enseignants développ�
 
 
 
-## Structure de la Base de Données
+##📌 Structure de la Base de Données
 
 ### Requêtes SQL pour créer les tables:
 ```sql
@@ -84,13 +87,23 @@ L'application est basée sur une architecture client-serveur :
   
 ![image](https://github.com/user-attachments/assets/6924aced-fd89-4784-ace7-44190f6ffad6)
 
-### Technologies Utilisées:
+### 📌 Technologies Utilisées:
 
-- NetBeans (Java) : Pour le développement de l’application.
-- MySQL : Pour la gestion de la base de données.
-- SWING : Pour l'interface graphique et rendre l’application facile à utiliser.
-## Demo :
-https://github.com/user-attachments/assets/92edab9b-8f5b-47ef-afc4-7d967c2898f7
+- **NetBeans (Java)** : Pour le développement de l’application.    
+
+- **MySQL**: Pour la gestion de la base de données.  
+
+- **SWING** : Pour l'interface graphique et rendre l’application facile à utiliser.  
+
+- **Bibliothèque graphique** : JFreeChart   
+
+- **Outils de développement** :  
+    - **IDE Java** : NetBeans
+    - **Conception** : MagicDraw
+    -  **Outil de gestion de base de données** : phpMyAdmin
+    - **Accès aux données** : JDBC
+## 🎥 Demo :
+https://github.com/user-attachments/assets/54e06a65-ec1d-4bec-b349-21a6a240fc06
 
 
 
